@@ -1,5 +1,8 @@
 package com.xstyx.distromatic.work;
 
-public class WorkDTO {
+import java.util.Map;
 
+public class WorkDTO {
+	private String type;
+	private Map<String, Object> arguments;
 }

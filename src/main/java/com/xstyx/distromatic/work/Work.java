@@ -61,6 +61,14 @@ public class Work {
 		this.end = end;
 	}
 	
+	public WorkType getWorkType() {
+		return workType;
+	}
+
+	public void setWorkType(WorkType workType) {
+		this.workType = workType;
+	}
+
 	public Object getResult() {
 		return result;
 	}
