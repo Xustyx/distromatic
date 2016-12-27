@@ -1,30 +1,22 @@
 package com.xstyx.distromatic.task;
 
-import java.time.LocalDateTime;
-
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.xstyx.distromatic.utils.Status;
 import com.xstyx.distromatic.work.Work;
 
-@Document
 public class Task {
 	
-	@Id
-	private String id;
+	@DBRef
+	@JsonIgnore
 	private Work work;
 	private Status status;
-	private LocalDateTime start;
-	private LocalDateTime end;
-	
-	public String getId() {
-		return id;
-	}
-	
-	public void setId(String id) {
-		this.id = id;
-	}
+	private String start;
+	private String end;
+	private long part;
+	private long total;
 	
 	public Work getWork() {
 		return work;
@@ -42,20 +34,35 @@ public class Task {
 		this.status = status;
 	}
 	
-	public LocalDateTime getStart() {
+	public String getStart() {
 		return start;
 	}
 	
-	public void setStart(LocalDateTime start) {
+	public void setStart(String start) {
 		this.start = start;
 	}
 	
-	public LocalDateTime getEnd() {
+	public String getEnd() {
 		return end;
 	}
 	
-	public void setEnd(LocalDateTime end) {
+	public void setEnd(String end) {
 		this.end = end;
 	}
-	
+
+	public long getPart() {
+		return part;
+	}
+
+	public void setPart(long part) {
+		this.part = part;
+	}
+
+	public long getTotal() {
+		return total;
+	}
+
+	public void setTotal(long total) {
+		this.total = total;
+	}	
 }

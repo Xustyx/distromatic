@@ -1,73 +1,61 @@
 package com.xstyx.distromatic.task;
 
-import com.xstyx.distromatic.utils.Status;
+import org.springframework.util.DigestUtils;
 
-public class TaskMd5 {
+import com.xstyx.distromatic.utils.IRunnable;
+import com.xstyx.distromatic.utils.Status;
+import com.xstyx.distromatic.utils.WordGenerator;
+
+public class TaskMd5 extends Task {
 	
-	private Task task;
-	private int pos;
-	private int total;
 	private String hash;
+	private WordGenerator wordGenerator;
 	
-	private final String charset = "0123456789abcdefghijklmnopqrstuvwxyz";
+	public static final long MAX_WORD_SIZE = 8;
+	public static final String DEFAULT_CHARSET = "0123456789abcdefghijklmnopqrstuvwxyz";
 	
-	public TaskMd5(Task task){
-		setTask(task);
+	public static final String HASH_KEY = "hash";
+	public static final String CHARSET_KEY = "charset";
+	
+	public TaskMd5(){
+		this.wordGenerator = new WordGenerator(DEFAULT_CHARSET);
 	}
 	
-	public String run(){
-		int i = pos;
-		
-		while(task.getWork().getStatus().equals(Status.Completed) || i < 1){
-			
-		}
-		
-		return "a";
-	}
-	
-	public String getWord(long pos){
-		
-		int base = charset.length();
-		long q = pos;
+	public void run(IRunnable observer){
+		long i = this.getPart();
 		String word = "";
 		
-		while(q != 0){
-			word = charset.charAt((int)(q % base)) + word;
-			q = q / base;
+		this.setStatus(Status.Running);
+		
+		while(Status.Completed.equals(getWorkStatus()) || word.length() <= MAX_WORD_SIZE){
+			word = wordGenerator.generate(i);
+			
+			if(checkMd5(word)){
+				observer.onComplete(word);
+			}
+			
+			i += this.getTotal();
 		}
-
-		return word;
-	} 
+		
+		observer.onFinish();
+	}
 	
+	private Status getWorkStatus(){
+		return this.getWork().getStatus();
+	}
 	
-	public Task getTask() {
-		return task;
+	private boolean checkMd5(String word){
+		return this.hash.equals(DigestUtils.md5DigestAsHex(word.getBytes()));
 	}
 
-	public void setTask(Task task) {
-		this.task = task;
+	public void setCharset(String charset) {
+		this.wordGenerator = new WordGenerator(charset);
 	}
 
-	public int getPos() {
-		return pos;
-	}
-	
-	public void setPos(int pos) {
-		this.pos = pos;
-	}
-	
-	public int getTotal() {
-		return total;
-	}
-	
-	public void setTotal(int total) {
-		this.total = total;
-	}
-	
 	public String getHash() {
 		return hash;
 	}
-	
+
 	public void setHash(String hash) {
 		this.hash = hash;
 	}

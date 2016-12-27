@@ -1,6 +1,8 @@
 package com.xstyx.distromatic.task;
 
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -8,9 +10,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value="/task")
 public class TaskController {
-
-	@RequestMapping(value="/{taskId}", method = RequestMethod.GET)
-	public void runTask(@PathVariable(name="taskId") String taskId) {
+	
+	@Autowired
+	private TaskService taskService;
+	
+	@RequestMapping(method = RequestMethod.POST)
+	public ResponseEntity<?> createTask(@RequestBody TaskDTO taskDto) {
+		Task task;
 		
+		task = taskService.createTask(taskDto);
+		
+		return ResponseEntity.ok(task);
 	}
 }

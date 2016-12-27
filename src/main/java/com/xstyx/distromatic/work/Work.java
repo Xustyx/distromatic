@@ -1,24 +1,25 @@
 package com.xstyx.distromatic.work;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.xstyx.distromatic.task.Task;
 import com.xstyx.distromatic.utils.Status;
+import com.xstyx.distromatic.utils.Type;
 
-@Document
 public class Work {
 
 	@Id
 	private String id;
-	private List<Task> tasks;
+	private List<Task> tasks = new ArrayList<Task>();
 	private Status status;
-	private LocalDateTime start;
-	private LocalDateTime end;
-	private WorkType workType;
+	private String start;
+	private String end;
+	private Type workType;
+	private Map<String, Object> arguments;
 	private Object result;
 	
 	public String getId() {
@@ -45,28 +46,36 @@ public class Work {
 		this.status = status;
 	}
 	
-	public LocalDateTime getStart() {
+	public String getStart() {
 		return start;
 	}
 	
-	public void setStart(LocalDateTime start) {
+	public void setStart(String start) {
 		this.start = start;
 	}
 	
-	public LocalDateTime getEnd() {
+	public String getEnd() {
 		return end;
 	}
 	
-	public void setEnd(LocalDateTime end) {
+	public void setEnd(String end) {
 		this.end = end;
 	}
 	
-	public WorkType getWorkType() {
+	public Type getWorkType() {
 		return workType;
 	}
 
-	public void setWorkType(WorkType workType) {
+	public void setWorkType(Type workType) {
 		this.workType = workType;
+	}
+
+	public Map<String, Object> getArguments() {
+		return arguments;
+	}
+
+	public void setArguments(Map<String, Object> arguments) {
+		this.arguments = arguments;
 	}
 
 	public Object getResult() {
