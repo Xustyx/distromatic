@@ -9,6 +9,7 @@ import com.xstyx.distromatic.work.WorkService;
 public class TaskManager extends Thread implements IRunnable  {
 	
 	private WorkService workService;
+	private TaskService taskService;
 	private Task task;
 	
 	public TaskManager() {}
@@ -57,6 +58,14 @@ public class TaskManager extends Thread implements IRunnable  {
 		this.workService = workService;
 	}
 
+	public TaskService getTaskService() {
+		return taskService;
+	}
+
+	public void setTaskService(TaskService taskService) {
+		this.taskService = taskService;
+	}
+
 	private void onEnd(){
 		Task task = this.task;
 		Work work = task.getWork();
@@ -77,6 +86,8 @@ public class TaskManager extends Thread implements IRunnable  {
 		
 		task.setStatus(Status.Completed);
 		work.setStatus(Status.Completed);
+		
+		taskService.stopTask(work.getId());
 		
 		this.onEnd();
 	}

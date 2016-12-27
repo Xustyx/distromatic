@@ -27,7 +27,7 @@ public class TaskMd5 extends Task {
 		
 		this.setStatus(Status.Running);
 		
-		while(Status.Completed.equals(getWorkStatus()) || word.length() <= MAX_WORD_SIZE){
+		while(Status.Stopped.equals(this.getStatus()) || word.length() <= MAX_WORD_SIZE){
 			word = wordGenerator.generate(i);
 			
 			if(checkMd5(word)){
@@ -40,9 +40,6 @@ public class TaskMd5 extends Task {
 		observer.onFinish();
 	}
 	
-	private Status getWorkStatus(){
-		return this.getWork().getStatus();
-	}
 	
 	private boolean checkMd5(String word){
 		return this.hash.equals(DigestUtils.md5DigestAsHex(word.getBytes()));

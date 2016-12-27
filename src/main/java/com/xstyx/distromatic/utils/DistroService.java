@@ -36,6 +36,7 @@ public class DistroService {
 		return tasks;
 	}
 	
+	//TODO: getIps
 	public long getResources(){
 		return 4;
 	}

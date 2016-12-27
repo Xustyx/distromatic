@@ -1,5 +1,8 @@
 package com.xstyx.distromatic.task;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +16,8 @@ public class TaskService {
 	
 	@Autowired
 	private WorkService workService;
+	
+	private Map<String,TaskManager> tasks = new HashMap<String, TaskManager>();
 	
 	public Task createTask(TaskDTO taskDto){	
 		TaskManager taskManager = new TaskManager();
@@ -31,11 +36,27 @@ public class TaskService {
 		
 		taskManager.setTask(task);
 		taskManager.setWorkService(workService);
+		taskManager.setTaskService(this);
 		taskManager.start();
 		
 		work.getTasks().add(task);
-		workService.saveOrUpdateWork(work);
+		work = workService.saveOrUpdateWork(work);
+		
+		tasks.put(work.getId(), taskManager);
 		
 		return task;	
+	}
+	
+	public boolean stopTask(String workId){
+		TaskManager taskManager;
+		taskManager = tasks.get(workId);
+		
+		if(taskManager != null) {
+			taskManager.getTask().setStatus(Status.Stopped);
+			tasks.remove(workId);
+			return true;
+		}
+		
+		return false;
 	}
 }
